@@ -1,10 +1,20 @@
 import React, {useContext} from 'react';
-import {Grid, Box, TextField} from '@mui/material';
+import {Grid, Box, TextField, CircularProgress, Modal} from '@mui/material';
 import {CustomButton, CustomButton2} from '../../shared/components'
 import { styled } from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
 import {auth} from '../../shared/firebase'
 import { AuthContext } from '../../shared/context/AuthContext';
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '1vh',
+  backgroundColor: 'transparent',
+  p: 4,
+};
 
 const CssTextField = styled(TextField)({
     '& label.Mui-focused': {
@@ -27,10 +37,12 @@ const CssTextField = styled(TextField)({
   });
 
 export const Login: React.FC = () => {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const navigate = useNavigate();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const user = useContext(AuthContext)
 
     const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(event.target.value);
@@ -40,12 +52,15 @@ export const Login: React.FC = () => {
     };
 
     const signIn = async () => {
+      handleOpen()
+      const code = email + '@missu.com'
       try {
-        await auth.signInWithEmailAndPassword(email, password);
-        alert("Bem vindo ao Connect");
+        await auth.signInWithEmailAndPassword(code, password);
+        handleClose()
         navigate('/')
       } catch (error) {
         console.log(error);
+        handleClose()
       }
     }; 
 
@@ -108,6 +123,15 @@ export const Login: React.FC = () => {
       
 
     </Grid>
+    <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+    >
+        <Box sx={style}>
+          <CircularProgress sx={{color: '#fe93ba'}} />
+        </Box>
+      </Modal>
     </Box>
   );
 };

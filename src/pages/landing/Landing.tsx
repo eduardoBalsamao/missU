@@ -38,7 +38,7 @@ export const Landing: React.FC = () => {
 
       <Grid item>
         <Box>
-          <Typography sx={{marginBottom: '2vh'}} variant='body1' color='#fe93ba'>
+          <Typography sx={{marginBottom: '2vh'}} variant='body1' color='#4a2963'>
             Conheça nossas redes sociais:
           </Typography>
         </Box>
