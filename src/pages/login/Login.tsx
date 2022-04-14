@@ -1,10 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useEffect} from 'react';
 import {Grid, Box, TextField, CircularProgress, Modal} from '@mui/material';
 import {CustomButton, CustomButton2} from '../../shared/components'
 import { styled } from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
 import {auth} from '../../shared/firebase'
-import { AuthContext } from '../../shared/context/AuthContext';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -43,6 +44,11 @@ export const Login: React.FC = () => {
     const navigate = useNavigate();
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [checked, setChecked] = React.useState(true);
+
+    const handleCheckChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setChecked(event.target.checked);
+    };
 
     const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(event.target.value);
@@ -53,6 +59,10 @@ export const Login: React.FC = () => {
 
     const signIn = async () => {
       handleOpen()
+      if(checked == true){
+        localStorage.setItem('lsCode', email)
+        localStorage.setItem('lsPass', password)
+      }
       const code = email + '@missu.com'
       try {
         await auth.signInWithEmailAndPassword(code, password);
@@ -63,6 +73,15 @@ export const Login: React.FC = () => {
         handleClose()
       }
     }; 
+
+    React.useEffect(() => {
+      const lsCode = localStorage.getItem('lsCode');
+      const lsPass = localStorage.getItem('lsPass');
+      if(lsCode && lsPass != null){
+        setEmail(lsCode);
+        setPassword(lsPass)
+      }
+    }, []);
 
   return (
     <Box height="100vh" display="flex"
@@ -78,7 +97,7 @@ export const Login: React.FC = () => {
         <Box sx={{marginY: '3vh', display: {xs: 'none', md: 'flex'}}}>
           <img style={{height: '30vh'}} src='https://i.imgur.com/zf8Aadc.png' />
         </Box>
-        <Box sx={{marginY: '6vh', display: {xs: 'flex', md: 'none'}}}>
+        <Box sx={{marginY: '4vh', display: {xs: 'flex', md: 'none'}}}>
           <img style={{height: '20vh'}} src='https://i.imgur.com/zf8Aadc.png' />
         </Box>
       </Grid>
@@ -91,6 +110,7 @@ export const Login: React.FC = () => {
                 size="small"
                 sx={{width: '100%'}}
                 onChange={handleChangeEmail}
+                value={email}
             />
         </Box>
       </Grid>
@@ -99,12 +119,32 @@ export const Login: React.FC = () => {
         <Box sx={{marginTop: '3vh', width: {xs: '85vw', md: '40vw'}, borderRadius: '25%'}}>
             <CssTextField
                 label="Senha"
-                id="outlined-size-small"
+                id="outlined-size-pass"
                 size="small"
                 sx={{width: '100%'}}
                 onChange={handleChangePassword}
+                value={password}
             />
         </Box>
+      </Grid>
+
+      <Grid item> 
+        <Box sx={{marginY:'2vh'}}>
+          <FormControlLabel sx={{color: '#4b2f68'}} control = {
+            <Checkbox
+              sx={{
+                color: '#CB7594',
+                '&.Mui-checked': {
+                  color: '#CB7594',
+                },
+              }}
+              checked={checked}
+              onChange={handleCheckChange}
+              inputProps={{ 'aria-label': 'controlled' }} />
+        
+            } label="Lembrar código e senha" />
+        </Box>
+      
       </Grid>
 
       <Grid item>
