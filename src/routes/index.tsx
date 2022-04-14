@@ -1,7 +1,7 @@
 
 import {Route, Routes} from 'react-router-dom';
-import {Landing, Login, Home, Register} from '../pages'
-import {Header, PrivateRoute} from '../shared/components'
+import {Landing, Login, Home, Register, Config} from '../pages'
+import {Header, PrivateRoute, HeaderConfig} from '../shared/components'
 
 export const AppRoutes = () =>{
   return (
@@ -16,6 +16,11 @@ export const AppRoutes = () =>{
       />
       <Route path="/register" element={
         <Register />
+      }
+      />
+      <Route path="/config" element={
+        <div><HeaderConfig />
+        <Config /></div>
       }
       />
       <Route element={<PrivateRoute />}>

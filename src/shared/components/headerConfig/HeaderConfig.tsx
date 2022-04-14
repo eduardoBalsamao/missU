@@ -1,12 +1,14 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { AppBar, Container, IconButton, Toolbar} from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
+import { AppBar, Container, IconButton, Toolbar, Menu, MenuItem, Typography, Button} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
+import { auth } from '../../firebase'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 
-export const Header: React.FC = () => {
+
+export const HeaderConfig: React.FC = () => {
     const navigate = useNavigate();
 
   return (
@@ -29,10 +31,10 @@ export const Header: React.FC = () => {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={()=>{navigate('/config')}}
+                onClick={()=>{navigate('/')}}
                 color="inherit"
               >
-                <SettingsIcon sx={{color: '#fe77a9'}} />
+                <ArrowBackIcon sx={{color: '#fe77a9'}} />
               </IconButton>
             </Box>
           </Toolbar>
